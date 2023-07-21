@@ -34,3 +34,66 @@ img {
     height: auto;
 }
 
+html, body{
+    height:100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.main {
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 50px;
+    align-items: center;
+    width: min(100vw, 700px);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.board {
+    width: max(330px, 90%);
+    aspect-ratio: 1/1;
+    display: grid;
+    grid-template: repeat(3, 1fr)/repeat(3, 1fr);
+}
+
+.cell {
+    border: 3px solid black;
+}
+
+
+#_00,
+#_10,
+#_20 {
+    border-left: transparent;
+}
+
+#_00,
+#_01,
+#_02 {
+    border-top: transparent;
+}
+
+#_02,
+#_12,
+#_22 {
+    border-right: transparent;
+}
+
+#_20,
+#_21,
+#_22 {
+    border-bottom: transparent;
+}
