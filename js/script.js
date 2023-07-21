@@ -10,7 +10,7 @@ const TicTacToeBoard = (() => {
     for (let i = 0; i < rows; i++) {
         board[i] = [];
         for (let j = 0; j < columns; j++) {
-            board[i][j] = ".";
+            board[i][j] = "";
             // change this to ""
         }
     }
@@ -29,11 +29,22 @@ const TicTacToeBoard = (() => {
         return board;
     }
 
+    let getMark = (row, column) => {
+        if (!(row >= 0) ||
+            !(row < 3) ||
+            !(column >= 0) ||
+            !(column < 3)) {
+            return
+        }
+        return board[row][column];
+    }
+
 
     return {
         board,
         fillSpot,
-        getBoard
+        getBoard,
+        getMark,
     };
 });
 
@@ -44,4 +55,20 @@ let GameController = (() => {
     ];
 
     let board = TicTacToeBoard();
+
+    let winConditions = [
+        ["01", "02", "03"],
+        ["10", "11", "12"],
+        ["20", "21", "22"],
+        ["00", "10", "20"],
+        ["01", "11", "12"],
+        ["02", "12", "22"],
+        ["00", "11", "22"],
+        ["02", "11", "20"]
+    ]; //any of these 3 all have to have the same symbol to win
+
+    let checkWinner = () => {
+        
+    }
+
 })
