@@ -19,7 +19,8 @@ const TicTacToeBoard = (() => {
         if (!(row >= 0) ||
             !(row < 3) ||
             !(column >= 0) ||
-            !(column < 3)) {
+            !(column < 3) ||
+            (board[row][column] != "")) {
             return
         }
         board[row][column] = marker;
@@ -53,9 +54,10 @@ let GameController = (() => {
         { player: 1, mark: 'x' },
         { player: 2, mark: 'o' }
     ];
-    let currentPlayer = players[0];
 
+    let currentPlayer = players[0];
     let board = TicTacToeBoard();
+    let roundsPlayed = 0;
 
     let switchPlayers = () => {
         currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
@@ -76,6 +78,7 @@ let GameController = (() => {
         ["02", "11", "20"]
     ]; //any of these 3 all have to have the same symbol to win
 
+    //function that checks win after every move
     let checkWin = () => {
         winConditions.forEach((winCondition) => {
             for (let i = 0; i < 3; i++) {
@@ -95,7 +98,7 @@ let GameController = (() => {
                             counter++;
                             previousMark = currentMark;
                             if (counter === 3) {
-                                return currentMark; //there is a win, return marker of player who won
+                                return `Player ${currentPlayer.player} has won!`; //there is a win,
                             }
                         }
                         else {
@@ -105,7 +108,30 @@ let GameController = (() => {
                 }
 
             }
-            return false; //end of checking all win conditions
+            if (roundsPlayed < 9) {
+                return false; //end of checking all win conditions
+            }
+            return `Game Over! It's a Tie!`
         })
     }
+
+    let playRound = (row, column) => {
+        board.fillSpot(row, column, currentPlayer.mark);
+        let msg = checkWin();
+        if (msg) {
+            return msg;
+        }
+        else {
+            switchPlayers();
+            return false;
+        }
+    }
+
+    return {
+        playRound,
+    };
+})();
+
+let displayController = (() => {
+    
 })
