@@ -53,8 +53,17 @@ let GameController = (() => {
         { player: 1, mark: 'x' },
         { player: 2, mark: 'o' }
     ];
+    let currentPlayer = players[0];
 
     let board = TicTacToeBoard();
+
+    let switchPlayers = () => {
+        currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
+    }
+
+    let getCurrentPlayer = () => {
+        return currentPlayer;
+    }
 
     let winConditions = [
         ["01", "02", "03"],
@@ -67,8 +76,36 @@ let GameController = (() => {
         ["02", "11", "20"]
     ]; //any of these 3 all have to have the same symbol to win
 
-    let checkWinner = () => {
-        
-    }
+    let checkWin = () => {
+        winConditions.forEach((winCondition) => {
+            for (let i = 0; i < 3; i++) {
+                let counter = 0;
+                let row, col;
+                for (let j = 0; j < 3; j++) {
+                    let currentMark = ""
+                    let previousMark = ""
+                    [row, col] = winCondition[i][j].split();
+                    currentMark = board.getMark(row, col);
+                    if (counter === 0) { //first instance of mark
+                        counter++;
+                        previousMark = currentMark;
+                    }
+                    else {
+                        if (currentMark === previousMark) {
+                            counter++;
+                            previousMark = currentMark;
+                            if (counter === 3) {
+                                return currentMark; //there is a win, return marker of player who won
+                            }
+                        }
+                        else {
+                            break; //break out of j foor loop to go to the next win condition combination
+                        }
+                    }
+                }
 
+            }
+            return false; //end of checking all win conditions
+        })
+    }
 })
