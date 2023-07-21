@@ -10,7 +10,7 @@ const TicTacToeBoard = (() => {
     for (let i = 0; i < rows; i++) {
         board[i] = [];
         for (let j = 0; j < columns; j++) {
-            board[i][j] = "";
+            board[i][j];
             // change this to ""
         }
     }
@@ -20,7 +20,7 @@ const TicTacToeBoard = (() => {
             !(row < 3) ||
             !(column >= 0) ||
             !(column < 3) ||
-            (board[row][column] != "")) {
+            (board[row][column])) {
             return
         }
         board[row][column] = marker;
@@ -98,6 +98,7 @@ let GameController = (() => {
                             counter++;
                             previousMark = currentMark;
                             if (counter === 3) {
+                                console.log("win");
                                 return `Player ${currentPlayer.player} has won!`; //there is a win,
                             }
                         }
@@ -109,29 +110,54 @@ let GameController = (() => {
 
             }
             if (roundsPlayed < 9) {
+                console.log("no win yet")
                 return false; //end of checking all win conditions
             }
+            console.log("tie");
             return `Game Over! It's a Tie!`
         })
     }
 
     let playRound = (row, column) => {
         board.fillSpot(row, column, currentPlayer.mark);
+        console.log(board.getMark(row, column));
         let msg = checkWin();
         if (msg) {
             return msg;
         }
         else {
             switchPlayers();
-            return false;
+            roundsPlayed++;
+            console.log(roundsPlayed)
+            return msg;
         }
     }
 
     return {
         playRound,
+        roundsPlayed,
+        board,
     };
 })();
 
 let displayController = (() => {
-    
-})
+    const boardCells = document.querySelectorAll('.cell');
+    boardCells.forEach((cell) => {
+        cell.addEventListener('click', (e) => {
+            placeMarker(e);
+        });
+    })
+
+    function placeMarker(e) {
+        let row, col;
+        [row, col] = (e.target.id).slice(1).split("");
+        console.log(row);
+        console.log(col);
+        console.log(GameController.board.getMark(+row, +col));
+        let text = GameController.board.getMark(row, col);
+        console.log(text);
+        e.target.textContent = text
+        let msg = GameController.playRound(row, col);
+        console.log(msg);
+    }
+})();
