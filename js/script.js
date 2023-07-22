@@ -119,54 +119,52 @@ let GameController = (() => {
         resetGame,
         board,
     };
-})();
+});
 
 let displayController = (() => {
+    let gameController = GameController();
     let circleUrl = `./assets/images/empty-circle-svgrepo-com.svg`;
     let crossUrl = `./assets/images/iconmonstr-x-mark-1.svg`;
     let messageContainer = document.querySelector('.message');
     let messageText = document.querySelector('.message-text span');
-
     const boardCells = document.querySelectorAll('.cell');
+
     let createGame = () => {
         boardCells.forEach((cell) => {
             cell.style.backgroundImage = '';
             cell.removeEventListener('click', placeMarker);
             cell.addEventListener('click', placeMarker, { once: true }); //event acts only once, then deletes itself
         });
-    }
+    };
 
     function placeMarker(evt) {
         let cell = (evt.target.id).slice(1);
-        let msg = GameController.playRound(cell);
-        evt.target.style.backgroundImage = `url(${GameController.board.getMark(cell) === 'x' ? crossUrl : circleUrl})`;
+        let msg = gameController.playRound(cell);
+        evt.target.style.backgroundImage = `url(${gameController.board.getMark(cell) === 'x' ? crossUrl : circleUrl})`;
         if (msg) {
             displayMessage(msg);
-        }
-    }
-
-
-
-    messageContainer.addEventListener('click', (e) => {
-        resetGame(e);
-    })
+        };
+    };
 
     let displayMessage = (msg) => {
         if (msg === 'win') {
-            messageText.textContent = `${(GameController.getCurrentPlayer().mark).toUpperCase()} Has Won!`
+            messageText.textContent = `${(gameController.getCurrentPlayer().mark).toUpperCase()} Has Won!`
         }
         else {
             messageText.textContent = `It's A Tie!`
-        }
+        };
         messageContainer.classList.remove('hidden');
-    }
+    };
 
     function resetGame(e) {
         createGame();
         messageContainer.classList.add('hidden');
         messageText.textContent = ``;
-        GameController.resetGame();
+        gameController.resetGame();
     }
 
     createGame();
+    messageContainer.addEventListener('click', (e) => {
+        resetGame(e);
+    })
 })();
