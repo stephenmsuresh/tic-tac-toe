@@ -85,13 +85,13 @@ let GameController = (() => {
 
     let playRound = (cell) => {
         board.fillSpot(cell, currentPlayer.mark);
+        roundsPlayed++;
         let msg = checkWin();
         if (msg) {
             return msg;
         }
         else {
             switchPlayers();
-            roundsPlayed++;
         }
     }
 
@@ -114,7 +114,9 @@ let displayController = (() => {
     function placeMarker(e) {
         let cell = (e.target.id).slice(1);
         let msg = GameController.playRound(cell);
-        console.log(msg);
+        if (msg) {
+            displayMessage(msg);
+        }
         let text = GameController.board.getMark(cell);
         e.target.textContent = text
     }
