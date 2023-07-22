@@ -55,18 +55,19 @@ let GameController = (() => {
 
     //function that checks win after every move
     let checkWin = () => {
-        winConditions.forEach((condition) => {
+        let winCheck = 'tie';
+
+        for (let i = 0; i < winConditions.length; i++) {
             let currMark = '';
             let prevMark = '';
-            let row, col, counter;
-            counter = 0;
-            for (let i = 0; i < 3; i++) {
-                currMark = board.getMark(condition[i]);
-                if (!prevMark) {
+            let counter = 0;
+            for (let j = 0; j < winConditions[i].length; j++) {
+                currMark = board.getMark(winConditions[i][j]);
+                if (currMark && prevMark === '') {
                     prevMark = currMark;
                     counter++;
                 }
-                else if (currMark === prevMark) {
+                else if (currMark && currMark === prevMark) {
                     counter++;
                 }
                 else {
@@ -74,24 +75,23 @@ let GameController = (() => {
                 }
             }
             if (counter === 3) {
-                return `Player ${currentPlayer.name} won!`
+                return `win`;
             }
-        });
+        }
+        if (roundsPlayed === 9) {
+            return 'tie'
+        }
     }
 
     let playRound = (cell) => {
         board.fillSpot(cell, currentPlayer.mark);
         let msg = checkWin();
-        console.log(msg);
         if (msg) {
-            console.log(msg);
             return msg;
         }
         else {
             switchPlayers();
             roundsPlayed++;
-            console.log(roundsPlayed)
-            return msg;
         }
     }
 
@@ -99,6 +99,7 @@ let GameController = (() => {
         playRound,
         roundsPlayed,
         board,
+        getCurrentPlayer,
     };
 })();
 
@@ -111,10 +112,10 @@ let displayController = (() => {
     })
 
     function placeMarker(e) {
-        let row, col;
-        [row, col] = (e.target.id).slice(1).split("");
-        let msg = GameController.playRound(row, col);
-        let text = GameController.board.getMark(row, col);
+        let cell = (e.target.id).slice(1);
+        let msg = GameController.playRound(cell);
+        console.log(msg);
+        let text = GameController.board.getMark(cell);
         e.target.textContent = text
     }
 })();
