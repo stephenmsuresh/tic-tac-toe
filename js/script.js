@@ -104,20 +104,32 @@ let GameController = (() => {
 })();
 
 let displayController = (() => {
+    let circleUrl = `./assets/images/empty-circle-svgrepo-com.svg`;
+    let crossUrl = `./assets/images/iconmonstr-x-mark-1.svg`
+    let endMessage = document.querySelector()
+
     const boardCells = document.querySelectorAll('.cell');
-    boardCells.forEach((cell) => {
-        cell.addEventListener('click', (e) => {
-            placeMarker(e);
+    let createGame = () => {
+        boardCells.forEach((cell) => {
+            cell.innerText = '';
+            cell.addEventListener('click', (e) => {
+                placeMarker(e);
+            });
         });
-    })
+    }
 
     function placeMarker(e) {
         let cell = (e.target.id).slice(1);
         let msg = GameController.playRound(cell);
+        e.target.style.backgroundImage = `url(${GameController.board.getMark(cell) === 'x' ? crossUrl : circleUrl})`;
         if (msg) {
             displayMessage(msg);
         }
-        let text = GameController.board.getMark(cell);
-        e.target.textContent = text
     }
+
+    let displayMessage = (msg) => {
+        alert(msg);
+    }
+
+    createGame();
 })();

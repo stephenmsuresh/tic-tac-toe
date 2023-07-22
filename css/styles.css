@@ -34,9 +34,11 @@ img {
     height: auto;
 }
 
-html, body{
-    height:100%;
+html,
+body {
+    height: 100%;
 }
+
 body {
     display: flex;
     flex-direction: column;
@@ -71,29 +73,35 @@ body {
 
 .cell {
     border: 3px solid black;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 
-#_00,
-#_10,
-#_20 {
+#_0,
+#_3,
+#_6 {
     border-left: transparent;
 }
 
-#_00,
-#_01,
-#_02 {
+#_0,
+#_1,
+#_2 {
     border-top: transparent;
 }
 
-#_02,
-#_12,
-#_22 {
+#_2,
+#_5,
+#_8 {
     border-right: transparent;
 }
 
-#_20,
-#_21,
-#_22 {
+#_6,
+#_7,
+#_8 {
     border-bottom: transparent;
+}
+
+.message {
+    color: black;
 }
