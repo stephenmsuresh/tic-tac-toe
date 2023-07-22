@@ -4,16 +4,22 @@ const TicTacToeBoard = (() => {
     let fillSpot = (cell, marker) => {
         if (!board[cell]) {
             board[cell] = marker
-        }
-    }
+        };
+    };
 
     let getBoard = () => {
         return board;
-    }
+    };
 
     let getMark = (cell) => {
         return board[cell];
-    }
+    };
+
+    let boardReset = () => {
+        for (let i = 0; i < board.length; i++) {
+            board[i] = '';
+        };
+    };
 
 
     return {
@@ -21,6 +27,7 @@ const TicTacToeBoard = (() => {
         fillSpot,
         getBoard,
         getMark,
+        boardReset,
     };
 });
 
@@ -95,40 +102,70 @@ let GameController = (() => {
         }
     }
 
+    let resetGame = () => {
+        board.boardReset();
+        roundsPlayed = 0;
+        currentPlayer = players[0];
+    }
+
+    let getMark = (cell) => {
+        return board[cell];
+    }
+
     return {
         playRound,
         roundsPlayed,
-        board,
         getCurrentPlayer,
+        resetGame,
+        board,
     };
 })();
 
 let displayController = (() => {
     let circleUrl = `./assets/images/empty-circle-svgrepo-com.svg`;
-    let crossUrl = `./assets/images/iconmonstr-x-mark-1.svg`
-    let endMessage = document.querySelector()
+    let crossUrl = `./assets/images/iconmonstr-x-mark-1.svg`;
+    let messageContainer = document.querySelector('.message');
+    let messageText = document.querySelector('.message-text span');
 
     const boardCells = document.querySelectorAll('.cell');
     let createGame = () => {
         boardCells.forEach((cell) => {
-            cell.innerText = '';
-            cell.addEventListener('click', (e) => {
-                placeMarker(e);
-            });
+            cell.style.backgroundImage = '';
+            cell.removeEventListener('click', placeMarker);
+            cell.addEventListener('click', placeMarker, { once: true }); //event acts only once, then deletes itself
         });
     }
 
-    function placeMarker(e) {
-        let cell = (e.target.id).slice(1);
+    function placeMarker(evt) {
+        let cell = (evt.target.id).slice(1);
         let msg = GameController.playRound(cell);
-        e.target.style.backgroundImage = `url(${GameController.board.getMark(cell) === 'x' ? crossUrl : circleUrl})`;
+        evt.target.style.backgroundImage = `url(${GameController.board.getMark(cell) === 'x' ? crossUrl : circleUrl})`;
         if (msg) {
             displayMessage(msg);
         }
     }
 
+
+
+    messageContainer.addEventListener('click', (e) => {
+        resetGame(e);
+    })
+
     let displayMessage = (msg) => {
-        alert(msg);
+        if (msg === 'win') {
+            messageText.textContent = `${(GameController.getCurrentPlayer().mark).toUpperCase()} Has Won!`
+        }
+        else {
+            messageText.textContent = `It's A Tie!`
+        }
+        messageContainer.classList.remove('hidden');
+    }
+
+    function resetGame(e) {
+        createGame();
+        messageContainer.classList.add('hidden');
+        messageText.textContent = ``;
+        GameController.resetGame();
     }
 
     createGame();
